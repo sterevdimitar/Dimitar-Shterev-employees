@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>File Upload</h2>
+
+<form id="upload-form" action="http://localhost:8080/api/upload" method="post" enctype="multipart/form-data">
+    Select file to upload:
+    <input type="file" name="file" id="file">
+    <input type="submit" value="Upload File" name="submit">
+</form>
+
+<style>
+table {
+  border-collapse: separate;
+  border-spacing: 15px;
+}
+</style>
+<h2>Projects for longest working pair</h2>
+<table id="data-grid">
+    <tr>
+        <th>Employee ID #1</th>
+        <th>Employee ID #2</th>
+        <th>Project ID</th>
+        <th>Days worked</th>
+    </tr>
+</table>
+
+<div id="error-message" style="color: red;"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#upload-form").on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr('action'),
+      type: 'POST',
+      data: new FormData(this),
+      processData: false,
+      contentType: false,
+      success: function(data){
+        // Clear
+        $("#data-grid").find("tr:gt(0)").remove();
+
+        $.each(data, function(i, item) {
+          $('<tr>').html("<td>"
+          + item.employeeId1 + "</td><td>"
+          + item.employeeId2 + "</td><td>"
+          + item.projectId + "</td><td>"
+          + item.daysWorked + "</td>")
+          .appendTo('#data-grid');
+        });
+        // Clear
+        $("#error-message").text("");
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        $("#data-grid").find("tr:gt(0)").remove();
+        $("#error-message").text(jqXHR.responseJSON.errorMessage);
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

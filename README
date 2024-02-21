@@ -1,0 +1,9 @@
+To run the app:
+
+1. ./gradlew build
+
+2. cd build/libs
+    java -jar Dimitar-Shterev-employees-1.0-SNAPSHOT.jar
+
+3. Access it at: http://localhost:8080/upload.html
+(You can use the sample csv files from test/resources directory)
